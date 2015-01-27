@@ -40,30 +40,29 @@ angular.module( "ngAutocomplete", [])
       link: function(scope, element, attrs, controller) {
 
         //options for autocomplete
-        var opts
-        var watchEnter = false
+        var opts;
+        var watchEnter = false;
+        var required = false;
         //convert options provided to opts
         var initOpts = function() {
 
-          opts = {}
+          opts = {};
           if (scope.options) {
 
-            if (scope.options.watchEnter !== true) {
-              watchEnter = false
-            } else {
+            if (scope.options.watchEnter === true) {
               watchEnter = true
             }
 
             if (scope.options.types) {
-              opts.types = []
-              opts.types.push(scope.options.types)
+              opts.types = [];
+              opts.types.push(scope.options.types);
               scope.gPlace.setTypes(opts.types)
             } else {
               scope.gPlace.setTypes([])
             }
 
             if (scope.options.bounds) {
-              opts.bounds = scope.options.bounds
+              opts.bounds = scope.options.bounds;
               scope.gPlace.setBounds(opts.bounds)
             } else {
               scope.gPlace.setBounds(null)
@@ -72,13 +71,18 @@ angular.module( "ngAutocomplete", [])
             if (scope.options.country) {
               opts.componentRestrictions = {
                 country: scope.options.country
-              }
+              };
               scope.gPlace.setComponentRestrictions(opts.componentRestrictions)
             } else {
               scope.gPlace.setComponentRestrictions(null)
             }
           }
-        }
+
+          if (element.attr('required')) {
+            required = true;
+          }
+
+        };
 
         if (scope.gPlace == undefined) {
           scope.gPlace = new google.maps.places.Autocomplete(element[0], {});
@@ -93,18 +97,21 @@ angular.module( "ngAutocomplete", [])
                 scope.details = result;
 
                 controller.$setViewValue(element.val());
+                controller.$setValidity('invalidAddress', true);
               });
             }
             else {
               if (watchEnter) {
-                getPlace(result)
+                getPlace(result, function() {
+                  controller.$setValidity('invalidAddress', true);
+                });
               }
             }
           }
-        })
+        });
 
         //function to get retrieve the autocompletes first result using the AutocompleteService 
-        var getPlace = function(result) {
+        var getPlace = function(result, callback) {
           var autocompleteService = new google.maps.places.AutocompleteService();
           if (result.name.length > 0){
             autocompleteService.getPlacePredictions(
@@ -118,6 +125,8 @@ angular.module( "ngAutocomplete", [])
                   scope.$apply(function() {
                     scope.details = null;
                   });
+
+                  if (typeof callback == 'function') { callback(); }
 
                 } else {
                   var placesService = new google.maps.places.PlacesService(element[0]);
@@ -137,8 +146,9 @@ angular.module( "ngAutocomplete", [])
                           var watchFocusOut = element.on('focusout', function(event) {
                             element.val(detailsResult.formatted_address);
                             element.unbind('focusout')
-                          })
+                          });
 
+                          if (typeof callback == 'function') { callback(); }
                         });
                       }
                     }
@@ -146,7 +156,7 @@ angular.module( "ngAutocomplete", [])
                 }
               });
           }
-        }
+        };
 
         controller.$render = function () {
           var location = controller.$viewValue;
@@ -161,6 +171,26 @@ angular.module( "ngAutocomplete", [])
           initOpts()
         }, true);
 
+        scope.$watch(function() {
+            return controller.$modelValue;
+          }, function(newValue, oldValue) {
+            if (typeof oldValue == 'undefined' && oldValue != newValue) {
+              if (newValue.length > 2) {
+                var res = {name: newValue};
+                getPlace(res, function() {
+                  controller.$setValidity('invalidAddress', true);
+                });
+              }
+            }
+          else {
+            if (required) {
+              if (typeof newValue == 'undefined' || !newValue || newValue.length < oldValue.length || newValue.length < 2) {
+                controller.$setValidity('invalidAddress', false);
+              }
+            }
+            // if the input field is not required, do not validate the address
+          }
+        })
       }
     };
   });
