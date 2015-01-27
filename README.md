@@ -6,7 +6,9 @@ Updated to now use ng-model, should work much better in forms. Can now set an in
 
 Tested with angularjs-1.2.4
 
-Uses optional directive parameters, so it won't work with <1.2. If people are interested I'll release a <1.2 version.
+Uses optional directive parameters, so it won't work with <1.2.
+
+This fork allow the address validation : input.$valid will be false as long as the user has not selected an address provided by the Google API. To use this, add required="required" to your input tag.
 
 ## Examples
 
@@ -29,7 +31,9 @@ var app = angular.module('myModule', ['ngAutocomplete']);
 Add the directive to a textbox
 
 ``` javascript
-    <input type="text"  ng-autocomplete ng-model="autocomplete" options="options" details="details"/>
+<form>
+    <input type="text"  ng-autocomplete ng-model="autocomplete" options="options" details="details" required="required"/>
+</form>
 ```
 
 ## Documentation
