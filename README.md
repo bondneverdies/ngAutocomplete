@@ -68,6 +68,7 @@ google places autocomplete info: https://developers.google.com/maps/documentatio
 ## Credits
 
 **Will Palahnuk** (http://github.com/wpalahnuk)
+
 google places autocomplete https://developers.google.com/maps/documentation/javascript/places
 
 ## Copyright and license
