@@ -131,7 +131,7 @@ angular.module( "ngAutocomplete", [])
                 } else {
                   var placesService = new google.maps.places.PlacesService(element[0]);
                   placesService.getDetails(
-                    {'reference': list[0].reference},
+                    {'placeId': list[0].place_id},
                     function detailsresult(detailsResult, placesServiceStatus) {
 
                       if (placesServiceStatus == google.maps.GeocoderStatus.OK) {
