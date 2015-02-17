@@ -1,4 +1,4 @@
-# ng-Autocomplete
+# ng-Autocomplete-Validation
 
 A simple directive for adding google places autocomplete to a textbox element. 
 
@@ -42,6 +42,8 @@ Add the directive to a textbox
 
 + details - more detailed autocomplete result, includes address parts, latlng, etc. (Optional)
 
++ required - enable the validation
+
 + options - configuration for the autocomplete (Optional)
 
     + types: type,        String, values can be 'geocode', 'establishment', '(regions)', or '(cities)'
@@ -61,9 +63,11 @@ google places autocomplete info: https://developers.google.com/maps/documentatio
 
 ## Author
 
-**Will Palahnuk** (http://github.com/wpalahnuk)
+**Sylvain B** (https://github.com/bondneverdies)
 
 ## Credits
+
+**Will Palahnuk** (http://github.com/wpalahnuk)
 
 google places autocomplete https://developers.google.com/maps/documentation/javascript/places
 
