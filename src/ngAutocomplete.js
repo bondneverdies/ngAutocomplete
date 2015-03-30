@@ -18,6 +18,7 @@
  *       + bounds: bounds,     Google maps LatLngBounds Object, biases results to bounds, but may return results outside these bounds
  *       + country: country    String, ISO 3166-1 Alpha-2 compatible country code. examples; 'ca', 'us', 'gb'
  *       + watchEnter:         Boolean, true; on Enter select top autocomplete result. false(default); enter ends autocomplete
+ *       + strict:             Boolean, true; validates angular input only on geocodable addresses. false(default); validates input on only autocompleted address
  *
  * example:
  *
@@ -50,31 +51,38 @@ angular.module( "ngAutocomplete", [])
           if (scope.options) {
 
             if (scope.options.watchEnter === true) {
-              watchEnter = true
+              watchEnter = true;
             }
 
             if (scope.options.types) {
               opts.types = [];
               opts.types.push(scope.options.types);
-              scope.gPlace.setTypes(opts.types)
+              scope.gPlace.setTypes(opts.types);
             } else {
-              scope.gPlace.setTypes([])
+              scope.gPlace.setTypes([]);
             }
 
             if (scope.options.bounds) {
               opts.bounds = scope.options.bounds;
-              scope.gPlace.setBounds(opts.bounds)
+              scope.gPlace.setBounds(opts.bounds);
             } else {
-              scope.gPlace.setBounds(null)
+              scope.gPlace.setBounds(null);
             }
 
             if (scope.options.country) {
               opts.componentRestrictions = {
                 country: scope.options.country
               };
-              scope.gPlace.setComponentRestrictions(opts.componentRestrictions)
+              scope.gPlace.setComponentRestrictions(opts.componentRestrictions);
             } else {
-              scope.gPlace.setComponentRestrictions(null)
+              scope.gPlace.setComponentRestrictions(null);
+            }
+
+            if (scope.options.strict) {
+              opts.strict = scope.options.strict;
+            }
+            else {
+              opts.strict = false;
             }
           }
 
@@ -129,30 +137,50 @@ angular.module( "ngAutocomplete", [])
                   if (typeof callback == 'function') { callback(); }
 
                 } else {
-                  var placesService = new google.maps.places.PlacesService(element[0]);
-                  placesService.getDetails(
-                    {'placeId': list[0].place_id},
-                    function detailsresult(detailsResult, placesServiceStatus) {
+                  if (opts.strict) {
+                    var placesService = new google.maps.places.PlacesService(element[0]);
+                    placesService.getDetails(
+                      {'placeId': list[0].place_id},
+                      function detailsresult(detailsResult, placesServiceStatus) {
 
-                      if (placesServiceStatus == google.maps.GeocoderStatus.OK) {
-                        scope.$apply(function() {
+                        if (placesServiceStatus == google.maps.GeocoderStatus.OK) {
+                          scope.$apply(function() {
 
-                          controller.$setViewValue(detailsResult.formatted_address);
-                          element.val(detailsResult.formatted_address);
-
-                          scope.details = detailsResult;
-
-                          //on focusout the value reverts, need to set it again.
-                          var watchFocusOut = element.on('focusout', function(event) {
+                            controller.$setViewValue(detailsResult.formatted_address);
                             element.val(detailsResult.formatted_address);
-                            element.unbind('focusout')
-                          });
 
-                          if (typeof callback == 'function') { callback(); }
-                        });
+                            scope.details = detailsResult;
+
+                            //on focusout the value reverts, need to set it again.
+                            var watchFocusOut = element.on('focusout', function(event) {
+                              element.val(detailsResult.formatted_address);
+                              element.unbind('focusout')
+                            });
+
+                            if (typeof callback == 'function') { callback(); }
+                          });
+                        }
                       }
-                    }
-                  );
+                    );
+                  }
+                  else {
+                    var addr = list[0].description;
+                    scope.$apply(function() {
+
+                      controller.$setViewValue(addr);
+                      element.val(addr);
+
+                      //on focusout the value reverts, need to set it again.
+                      var watchFocusOut = element.on('focusout', function(event) {
+                        element.unbind('focusout');
+                        setTimeout(function () {
+                          element.val(addr);
+                        }, 100);
+                      });
+                      if (typeof callback == 'function') { callback(); }
+                    });
+                  }
+
                 }
               });
           }
