@@ -9,7 +9,7 @@
   "authors": [
     "Sylvain <bond.never.die@gmail.com>"
   ],
-  "description": "An AngularJS directive for adding Google Places Autocomplte to an input text element. Based on Will Palahnuk directive with addition of input.$valid support.",
+  "description": "An AngularJS directive for adding Google Places Autocomplete to an input text element. Based on Will Palahnuk directive with addition of input.$valid support.",
   "moduleType": [
     "globals"
   ],
