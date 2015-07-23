@@ -1,26 +1,28 @@
 # ng-Autocomplete-Validation
 
-A simple directive for adding google places autocomplete to a textbox element. 
+An AngularJS directive for adding [Google Places Autocomplete](https://developers.google.com/places/webservice/autocomplete) 
+to an input text element, based on [Will Palahnuk directive](http://github.com/wpalahnuk/ngAutocomplete). 
 
-Updated to now use ng-model, should work much better in forms. Can now set an initial value using ng-model. Using the ng-model to set the textbox value does not trigger the autocomplete query.
+This fork allow the address validation : input.$valid will be false as long as the user has not selected an address provided 
+by the Google API. To use this, add required="required" to your input tag.
 
-Tested with angularjs-1.2.4
+ 
+## Requirements
 
-Uses optional directive parameters, so it won't work with <1.2.
++ AngularJS >= 1.2 (Uses optional directive parameters) _Tested with angularJS 1.2.21_
+ 
+ 
+## Limitations
 
-This fork allow the address validation : input.$valid will be false as long as the user has not selected an address provided by the Google API. To use this, add required="required" to your input tag.
+You can now set an initial value using ng-model. Using the ng-model to set the textbox value will not trigger the autocomplete query.
 
-## Examples
 
-+ [Example Plunkers - Simple Usage](http://plnkr.co/edit/GE34ojss9xMGm0024FvM?p=preview)
+## Getting started
 
-+ [Example Plunkers - Advanced Usage](http://plnkr.co/edit/GF3nM3XfYX9El2w11pGo?p=preview)
-
-## Usage
-
-Include the required libraries 
+Include the required libraries
 ```html
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+<script type="text/javascript" src="ngAutocomplete/dist/ngAutocomplete.min.js"></script>
 ```
 
 Declare a dependency on the `ngAutocomplete` module
@@ -32,51 +34,58 @@ Add the directive to a textbox
 
 ``` javascript
 <form>
-    <input type="text"  ng-autocomplete ng-model="autocomplete" options="options" details="details" required="required"/>
+    <input type="text"  ng-autocomplete ng-model="myplace" options="options" details="details" required="required"/>
 </form>
 ```
 
 ## Documentation
 
-+ ng-model - autocomplete textbox value
++ ng-model - autocomplete textbox binding value
 
-+ details - more detailed autocomplete result, includes address parts, latlng, etc. (Optional)
++ details - if specified, a more detailed autocomplete result will be provided, including address parts, lat-lng, etc. (Optional)
 
-+ required - enable the validation
++ required - if specified, enable the validation
 
-+ options - configuration for the autocomplete (Optional)
++ options - configuration for the autocomplete (Optional), see below:
 
-    + types: type,        String, values can be 'geocode', 'establishment', '(regions)', or '(cities)'
-	+ bounds: bounds,     Google maps LatLngBounds Object, biases results to bounds, but may return results outside these bounds
-	+ country: country    String, ISO 3166-1 Alpha-2 compatible country code. examples; 'ca', 'us', 'gb'
-    + watchEnter:         Boolean, true; on Enter select top autocomplete result. false(default); enter ends autocomplete
-    + strict:             Boolean, true; validates angular input only on geocodable addresses. false(default); validates input on only autocompleted address
+  + types:              {Array}, containing one or more of the supported types listed in the [Google Places API: Supported Place Types list](https://developers.google.com/places/supported_types). The service will return results that match any of the specified types.
+	+ bounds:             {[google.maps.LatLngBounds Object](https://developers.google.com/maps/documentation/javascript/reference#LatLngBounds)}, biases results to bounds, but may return results outside these bounds
+	+ country:            {String}, ISO 3166-1 Alpha-2 compatible country code. examples; 'ca', 'us', 'gb'
+  + watchEnter:         {Boolean}, true; on Enter select top autocomplete result. false(default); enter ends autocomplete
+  + strict:             {Boolean}, true; validates angular input only on geocodable addresses. false(default); validates input on every autocompletable address
 
-example: 
+Example: 
 ``` javascript
 options = {
-types: '(cities)',
-country: 'ca'
+  types: '(cities)',
+  country: 'ca'
 }
 ```
 
-google places autocomplete info: https://developers.google.com/maps/documentation/javascript/places
+## Usage Examples
 
-## Author
++ [Example Plunkers - Simple Usage](http://plnkr.co/edit/GE34ojss9xMGm0024FvM?p=preview)
 
-**Sylvain B** (https://github.com/bondneverdies)
++ [Example Plunkers - Advanced Usage](http://plnkr.co/edit/GF3nM3XfYX9El2w11pGo?p=preview)
+
 
 ## Credits
 
+**Sylvain B** (https://github.com/bondneverdies)
 **Will Palahnuk** (http://github.com/wpalahnuk)
+**Google** (https://developers.google.com/maps/documentation/javascript/places)
 
-google places autocomplete https://developers.google.com/maps/documentation/javascript/places
+
+## See also
+ 
+ https://developers.google.com/maps/documentation/javascript/places
+ https://developers.google.com/places/webservice/autocomplete
 
 ## Copyright and license
 
-    The MIT License
+    The MIT License (MIT)
 
-	Copyright (c) 2014 Will Palahnuk
+	Copyright (c) 2015 Sylvain B
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal

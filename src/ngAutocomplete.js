@@ -1,31 +1,11 @@
 'use strict';
 
 /**
- * A directive for adding google places autocomplete to a text box
- * google places autocomplete info: https://developers.google.com/maps/documentation/javascript/places
+ * An AngularJS directive for adding [Google Places Autocomplete](https://developers.google.com/places/webservice/autocomplete)
+ * to an input text element, based on [Will Palahnuk directive](http://github.com/wpalahnuk/ngAutocomplete).
  *
- * Usage:
- *
- * <input type="text"  ng-autocomplete ng-model="autocomplete" options="options" details="details/>
- *
- * + ng-model - autocomplete textbox value
- *
- * + details - more detailed autocomplete result, includes address parts, latlng, etc. (Optional)
- *
- * + options - configuration for the autocomplete (Optional)
- *
- *       + types: type,        String, values can be 'geocode', 'establishment', '(regions)', or '(cities)'
- *       + bounds: bounds,     Google maps LatLngBounds Object, biases results to bounds, but may return results outside these bounds
- *       + country: country    String, ISO 3166-1 Alpha-2 compatible country code. examples; 'ca', 'us', 'gb'
- *       + watchEnter:         Boolean, true; on Enter select top autocomplete result. false(default); enter ends autocomplete
- *       + strict:             Boolean, true; validates angular input only on geocodable addresses. false(default); validates input on only autocompleted address
- *
- * example:
- *
- *    options = {
- *        types: '(cities)',
- *        country: 'ca'
- *    }
+ * This fork allow the address validation : input.$valid will be false as long as the user has not selected an address provided
+ * by the Google API. To use this, add required="required" to your input tag.
 **/
 
 angular.module( "ngAutocomplete", [])
@@ -152,7 +132,7 @@ angular.module( "ngAutocomplete", [])
                             scope.details = detailsResult;
 
                             //on focusout the value reverts, need to set it again.
-                            var watchFocusOut = element.on('focusout', function(event) {
+                            element.on('focusout', function(event) {
                               element.val(detailsResult.formatted_address);
                               element.unbind('focusout')
                             });
@@ -171,7 +151,7 @@ angular.module( "ngAutocomplete", [])
                       element.val(addr);
 
                       //on focusout the value reverts, need to set it again.
-                      var watchFocusOut = element.on('focusout', function(event) {
+                      element.on('focusout', function(event) {
                         element.unbind('focusout');
                         setTimeout(function () {
                           element.val(addr);
