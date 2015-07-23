@@ -27,7 +27,8 @@ $ bower install ng-autocomplete-validation
 Include the requirements and the library
 ```html
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
-<script type="text/javascript" src="ngAutocomplete/dist/ngAutocomplete.min.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="bower_components/ng-autocomplete-validation/dist/ngAutocomplete.min.js"></script>
 ```
 
 Declare a dependency on the `ngAutocomplete` module
