@@ -19,7 +19,12 @@ You can now set an initial value using ng-model. Using the ng-model to set the t
 
 ## Getting started
 
-Include the required libraries
+Install the library
+```bash
+$ bower install ng-autocomplete-validation
+```
+
+Include the requirements and the library
 ```html
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 <script type="text/javascript" src="ngAutocomplete/dist/ngAutocomplete.min.js"></script>

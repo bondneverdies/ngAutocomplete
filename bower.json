@@ -1,8 +1,30 @@
 {
-  "name": "ngAutocomplete",
+  "name": "ng-autocomplete-validation",
   "version": "1.0.0",
   "main": "src/ngAutocomplete.js",
   "dependencies": {
     "angular": ">=1.2.0"
-  }
+  },
+  "homepage": "https://github.com/bondneverdies/ngAutocompleteValidation",
+  "authors": [
+    "Sylvain <bond.never.die@gmail.com>"
+  ],
+  "description": "An AngularJS directive for adding Google Places Autocomplte to an input text element. Based on Will Palahnuk directive with addition of input.$valid support.",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "angular",
+    "google",
+    "places",
+    "validation"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
